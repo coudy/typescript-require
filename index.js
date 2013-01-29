@@ -99,11 +99,13 @@ require.extensions['.ts'] = function(module) {
 
     compiler.typeCheck();
 
-    compiler.emit(function(fn) {
-        count = 0;
-        if(fn == moduleFilename.replace(/\.ts$/, ".js")) return output;
-        else return nulloutput;
-    });
+    var emitterIOHost = {
+      createFile: function (fileName, utf8) {
+        return output;
+      }
+    };
+
+    compiler.emit(emitterIOHost);
 
     module._compile(js, moduleFilename);
 };
